@@ -25,7 +25,8 @@
 
 ## 构建
 
-本次验证使用 Node.js 26.12.1、npm 11.20.0、Go 1.27.2 和 musl-gcc。
+初次部署验证使用 Node.js 26.12.1、npm 11.20.0、Go 1.27.2 和 musl-gcc。
+仓库后续构建要求 Go 1.27.3 或更新补丁版本，以包含标准库安全修复。
 需要先安装这些工具及 C 编译环境。前端产物会被嵌入 Go 程序，必须先构建前端。
 
 ```bash
@@ -55,3 +56,10 @@ CGO_ENABLED=1 CC=musl-gcc go build -p 2 -trimpath \
 - 登录页首屏资源标签由 19 个减少为 15 个；实际加载速度取决于网络和设备。
 
 仓库包含源码与构建说明。运行数据库、证书、账号凭据和服务器备份由部署环境单独管理。
+
+## GitHub 自动检查与发布
+
+- CI 保留 Go 测试、竞争检测、漏洞检查、前端完整检查及构建。
+- DOMPurify 最低版本提高到 3.4.17，Storybook 和 Vitest 更新安全补丁，Undici 更新锁定版本；发行包及 Docker 构建使用有效的 Xray v26.10.21。
+- `github.com/apernet/quic-go` 固定在已兼容的提交；其新版本标签声明的模块路径不匹配，需手动评估升级，仍由 `govulncheck` 检查安全问题。其余依赖继续由 Dependabot 检查更新。
+- 文档质量检查继续执行。自用仓库默认不发布上游文档站点；需要发布时，在仓库 Settings → Pages 中选择 GitHub Actions，再设置 Actions 变量 `ENABLE_DOCS_DEPLOY=true` 和自己的 `NEXT_PUBLIC_SITE_URL`。

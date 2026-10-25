@@ -13,6 +13,10 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      # This fork is pinned to a compatible commit. New tags declare the upstream
+      # module path; review fork upgrades manually. CI still runs govulncheck.
+      - dependency-name: "github.com/apernet/quic-go"
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
